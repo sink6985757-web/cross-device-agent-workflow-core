@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "core_version": "0.1.0",
+  "documentation_profile": "two-tier-lite-default",
+  "profiles": {
+    "lite": {
+      "purpose": "Low-token project lifecycle",
+      "daily_read_surface": [
+        "AGENTS.md",
+        "handoff.md",
+        "git status"
+      ],
+      "canonical_delivery": "external-pinned"
+    },
+    "full": {
+      "purpose": "First-device bootstrap and on-demand governed workflows",
+      "daily_read_surface": [
+        "AGENTS.md",
+        "handoff.md"
+      ],
+      "canonical_delivery": "this-repository"
+    }
+  },
+  "dependencies": {
+    "lite_three_skills": {
+      "version": "v1.1.1",
+      "source": "https://github.com/sink6985757-web/cross-device-agent-skills",
+      "required_skills": [
+        "initial",
+        "startup",
+        "shutdown"
+      ]
+    },
+    "readygate": {
+      "version": "v0.2.1",
+      "source": "configure:readygate_repository_url",
+      "runtime_path": "~/.agents/skills/readygate"
+    }
+  },
+  "allowed_statuses": [
+    "IMPLEMENTED",
+    "PROMPT_ONLY",
+    "PLANNED"
+  ],
+  "features": [
+    {
+      "id": "bootstrap-advisor",
+      "status": "IMPLEMENTED",
+      "profile": "full",
+      "entry": "scripts/install.ps1",
+      "writes": false
+    },
+    {
+      "id": "bootstrap-apply",
+      "status": "PLANNED",
+      "profile": "full",
+      "entry": "BOOTSTRAP.md#6-寫入與回復",
+      "writes": true
+    },
+    {
+      "id": "repository-validation",
+      "status": "IMPLEMENTED",
+      "profile": "full",
+      "entry": "scripts/validate.ps1",
+      "writes": false
+    },
+    {
+      "id": "lite-project-lifecycle",
+      "status": "IMPLEMENTED",
+      "profile": "lite",
+      "entry": "external:lite_three_skills",
+      "writes": "initial-and-shutdown-only"
+    },
+    {
+      "id": "readygate-integration",
+      "status": "IMPLEMENTED",
+      "profile": "on-demand",
+      "entry": "WORKFLOW.md#readygate-橫向閘門",
+      "writes": "per-confirmed-work-order"
+    },
+    {
+      "id": "ten-capability-sop",
+      "status": "IMPLEMENTED",
+      "profile": "on-demand",
+      "entry": "WORKFLOW.md",
+      "writes": "per-section-policy"
+    },
+    {
+      "id": "legacy-project-migration",
+      "status": "PROMPT_ONLY",
+      "profile": "full",
+      "entry": "MAINTAINERS.md#舊專案套用",
+      "writes": "approval-required"
+    },
+    {
+      "id": "lite-vnext-bridge",
+      "status": "PLANNED",
+      "profile": "maintenance",
+      "entry": "MAINTAINERS.md#lite-vnext-銜接計畫",
+      "writes": "separate-release"
+    },
+    {
+      "id": "notion-sync",
+      "status": "PROMPT_ONLY",
+      "profile": "on-demand",
+      "entry": "WORKFLOW.md#6-pluginsapps-mcp-跨工具工作流",
+      "writes": "explicit-request-only"
+    }
+  ]
+}

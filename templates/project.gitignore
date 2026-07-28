@@ -1,0 +1,51 @@
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+credentials.*
+secrets.*
+auth.local.*
+token.local.*
+
+# Personal workflow overlay
+policy.local.yaml
+.agent-workflow.local/
+
+# Agent runtime state
+.hermes/
+.codex/
+.gemini/cache/
+.claude/settings.local.json
+.archive/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Node and web builds
+node_modules/
+dist/
+build/
+coverage/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+~$*
+
+# Obsidian device-specific UI state
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json

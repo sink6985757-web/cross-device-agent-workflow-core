@@ -1,0 +1,40 @@
+schema_version: 1
+profile: lite
+
+project:
+  name: "<project-name>"
+  owner_role: "<owner-role>"
+
+authority:
+  code: "project-git"
+  handoff: "handoff.md"
+  knowledge: "<vault-relative-path-or-NOT_CONFIGURED>"
+  personal_global: "private-dotfiles"
+
+approvals:
+  project_write: "confirmed-work-order"
+  commit: "confirm"
+  push: "confirm"
+  publish: "confirm"
+  delete: "readygate"
+  batch_migration: "readygate"
+  notion_write: "explicit-only"
+
+integrations:
+  github: "optional"
+  obsidian: "optional"
+  notion: "explicit-only"
+  plugins_apps_mcp: []
+
+security:
+  secret_scan_before_commit: true
+  persist_device_absolute_paths: false
+  persist_device_name: false
+  unknown_untracked_action: "stop"
+
+rollback:
+  owner_role: "<owner-role>"
+  method: "<backup-patch-or-revert>"
+
+# 複製本檔為 policy.local.yaml 後再填值。
+# policy.local.yaml 必須保持 ignored，不得提交私人設定。

@@ -1,0 +1,46 @@
+# Secrets and local policy
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+credentials.*
+secrets.*
+auth.local.*
+token.local.*
+policy.local.yaml
+.agent-workflow.local/
+
+# Runtime and Agent-private state
+.hermes/
+.codex/
+.gemini/cache/
+.claude/settings.local.json
+.archive/
+
+# Language and build caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+node_modules/
+dist/
+build/
+coverage/
+.venv/
+venv/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+~$*
+
+# Local-only reports
+reports/local/
