@@ -99,7 +99,7 @@ $Project = [ordered]@{
 }
 
 $Result = [ordered]@{
-    bootstrap_version     = '0.1.0'
+    bootstrap_version     = '0.2.0-local'
     classification        = $Classification
     requested_mode        = $Mode
     recommended_mode      = $RecommendedMode
@@ -116,5 +116,5 @@ $Result = [ordered]@{
 $Result | ConvertTo-Json -Depth 5
 
 if ($Apply) {
-    throw 'Apply is PLANNED and intentionally disabled in 0.1.0. No files were changed.'
+    throw 'Apply is PLANNED and intentionally disabled in 0.2.0-local. No files were changed.'
 }

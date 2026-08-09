@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "core_version": "0.1.0",
+  "core_version": "0.2.0-local",
   "documentation_profile": "two-tier-lite-default",
   "profiles": {
     "lite": {
@@ -10,21 +10,35 @@
         "handoff.md",
         "git status"
       ],
+      "required_skills": [
+        "initial",
+        "startup",
+        "shutdown"
+      ],
       "canonical_delivery": "external-pinned"
     },
     "full": {
-      "purpose": "First-device bootstrap and on-demand governed workflows",
+      "purpose": "First-device bootstrap and governed workflows",
       "daily_read_surface": [
         "AGENTS.md",
         "handoff.md"
+      ],
+      "required_skills": [
+        "initial",
+        "startup",
+        "shutdown",
+        "readygate"
       ],
       "canonical_delivery": "this-repository"
     }
   },
   "dependencies": {
     "lite_three_skills": {
-      "version": "v1.1.1",
+      "version": "v2.0.0-local",
+      "last_public_version": "v1.1.1",
+      "delivery_status": "LOCAL_ONLY",
       "source": "https://github.com/sink6985757-web/cross-device-agent-skills",
+      "runtime_path": "~/.agents/skills",
       "required_skills": [
         "initial",
         "startup",
@@ -33,7 +47,7 @@
     },
     "readygate": {
       "version": "v0.2.1",
-      "source": "configure:readygate_repository_url",
+      "source": "https://github.com/sink6985757-web/readygate-skill-chatgpt-app",
       "runtime_path": "~/.agents/skills/readygate"
     }
   },
@@ -65,6 +79,13 @@
       "writes": false
     },
     {
+      "id": "project-four-file-contract",
+      "status": "IMPLEMENTED",
+      "profile": "lite",
+      "entry": "README.md#專案四檔契約",
+      "writes": "initial-and-shutdown-only"
+    },
+    {
       "id": "lite-project-lifecycle",
       "status": "IMPLEMENTED",
       "profile": "lite",
@@ -93,18 +114,11 @@
       "writes": "approval-required"
     },
     {
-      "id": "lite-vnext-bridge",
-      "status": "PLANNED",
-      "profile": "maintenance",
-      "entry": "MAINTAINERS.md#lite-vnext-銜接計畫",
-      "writes": "separate-release"
-    },
-    {
-      "id": "notion-sync",
+      "id": "external-knowledge-on-demand",
       "status": "PROMPT_ONLY",
       "profile": "on-demand",
       "entry": "WORKFLOW.md#6-pluginsapps-mcp-跨工具工作流",
-      "writes": "explicit-request-only"
+      "writes": "explicit-independent-task-only"
     }
   ]
 }

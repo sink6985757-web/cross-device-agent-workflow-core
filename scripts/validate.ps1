@@ -13,6 +13,7 @@ $RequiredFiles = @(
     'WORKFLOW.md',
     'MAINTAINERS.md',
     'FEATURES.json',
+    'CHANGELOG.md',
     '.gitignore',
     'LICENSE',
     'templates/AGENTS.md',
@@ -100,4 +101,4 @@ if ($Errors.Count -gt 0) {
     exit 1
 }
 
-Write-Host "PASS: Cross-File AI Workflow Core is valid ($($Files.Count) files checked)."
+Write-Host "PASS: Cross-Device Agent Workflow Core is valid ($($Files.Count) files checked)."

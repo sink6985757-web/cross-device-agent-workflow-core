@@ -7,7 +7,7 @@
 - 先讀、再判斷、再建議，最後等待確認。
 - 不讀取或輸出 token、credential、`.env`、私鑰、cookie 或認證快取內容。
 - 不把裝置絕對路徑寫入 canonical 文件。
-- 不覆寫既有 `AGENTS.md`、`handoff.md`、skills 或私人 dotfiles。
+- 不覆寫既有 `AGENTS.md`、`README.md`、`CHANGELOG.md`、`handoff.md`、skills 或私人 dotfiles。
 - 不代替使用者登入 GitHub。
 - 沒有明確授權時，不 commit、push、發布、刪除或寫入外部服務。
 
@@ -15,7 +15,7 @@
 
 只讀檢查：
 
-1. 目前目錄的 `AGENTS.md`、`handoff.md`、README 與 Git 狀態。
+1. 目前目錄的 `AGENTS.md`、`README.md`、`CHANGELOG.md`、`handoff.md` 與 Git 狀態。
 2. `~/.agents/GLOBAL.md` 是否存在。
 3. `~/.agents/skills/initial`、`startup`、`shutdown`、`readygate` 是否存在。
 4. Agent adapter 狀態；只辨識是否存在，不複製 Skill。
@@ -46,9 +46,10 @@ powershell -NoProfile -File .\scripts\install.ps1
 適合一般專案與低 token 接續：
 
 - 只使用外部 `initial`、`startup`、`shutdown`。
-- 專案日常只讀 `AGENTS.md`、`handoff.md` 與 Git 狀態。
+- 專案日常只讀 `AGENTS.md`、`handoff.md` 與 Git 狀態；需要近期版本背景時才讀 `CHANGELOG.md`。
 - 不自動讀完整十項 SOP。
 - 需要高風險操作時才按需載入 ReadyGate 或 Full Core 段落。
+- 每次收工更新 `CHANGELOG.md` 與 `handoff.md`；GitHub delivery 前另更新 `README.md`。
 
 ### Full Core
 
@@ -57,7 +58,8 @@ powershell -NoProfile -File .\scripts\install.ps1
 - 先確認 Git、GitHub CLI、chezmoi 與登入責任。
 - Lite 與 ReadyGate 使用 `FEATURES.json` 登記的相容版本。
 - 私人 dotfiles 只在已驗證來源且使用者明確確認時處理。
-- 新專案可套用模板；舊專案只能先輸出 patch 建議。
+- 新專案只補齊缺少的四檔；舊專案只能先輸出 patch 建議。
+- Notion、Obsidian、Knowledge Master 與其他外部知識庫不參與本流程。
 
 ## 4. 固定回報
 
