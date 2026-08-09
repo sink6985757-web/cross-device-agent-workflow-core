@@ -3,7 +3,7 @@
 跨裝置 Agent 工作流的公開 Full Core。它負責第一次部署、完整治理、相容性檢查與按需 SOP；日常專案則使用外部 Lite 三技能。
 
 目前 GitHub 發行版：`v0.1.0`
-開發中版本：`v0.2.0`（本機未 commit／push）
+GitHub `main` 候選版本：`v0.2.0`（source 已 push；尚未 tag／Release）
 
 ## 先選 profile
 
@@ -78,7 +78,7 @@ Agent 必須以 Git remote 與 revision 辨識 Core checkout，不以資料夾�
 ## 目前限制
 
 - `scripts/install.ps1 -Apply` 仍會停止，因為 Apply 是 `PLANNED`。
-- Lite `v2.0.0` 目前是本機候選版；GitHub 發行前仍以已發布版本為外部可安裝基準。
+- Lite `v2.0.0` source 已在 GitHub `main`；正式安裝基準仍需區分 `main` 候選與已發布 tag。
 - commit、push、tag、release、批次移動、封存與權限變更必須通過確認工作單與 Delivery Gate。
 - 公開文件不得保存 credential、私人 vault、裝置絕對路徑或本機 checkout 名稱。
 

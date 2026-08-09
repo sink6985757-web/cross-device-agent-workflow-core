@@ -15,8 +15,8 @@
 - ReadyGate Skill／Plugin validators 與 8 項合約測試通過。
 
 ### Delivery
-- GitHub：`LOCAL_ONLY`
-- commit／push／tag：未執行，等待 Delivery Gate。
+- GitHub：`VERIFIED`，治理 commit `b6e27e330c5e07a1b1d8d41077d28b1a21811331` 已推送 `main` 並回讀一致。
+- tag／Release：未執行；正式 release 基準仍是 `v0.1.0`。
 
 ## [0.1.0] - 2026-07-28
 
