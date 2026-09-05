@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased] - 2026-09-05 authority pin
+
+- 三個 source checkpoint 已以 Git 與 GitHub API 回讀；補上本專案 manual manifest。
+- newday Initial 保留四檔、Startup 保留五檔 hash 與 HEAD、Shutdown scoped push／readback 均通過。
+- dotfiles active source／Drive mirror 與 runtime 四技能 hash 已對齊。
+- FEATURES 移除 LOCAL_ONLY 舊狀態；template 使用已發布的固定 SHA。
+
 ## [Unreleased] - 2026-09-05
 
 - `WO-DRIVE-GITHUB-ALIGN-20260905-v2`：完成portable lifecycle schema、template、唯讀 Git classifier 與 Full Core 維護流程；保留既有功能與治理差異。

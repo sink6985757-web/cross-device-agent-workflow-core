@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "core_version": "0.2.0-local",
+  "core_version": "0.2.0",
   "documentation_profile": "two-tier-lite-default",
   "profiles": {
     "lite": {
@@ -34,21 +34,23 @@
   },
   "dependencies": {
     "lite_three_skills": {
-      "version": "v2.0.0-local",
+      "version": "v2.0.0",
       "last_public_version": "v1.1.1",
-      "delivery_status": "LOCAL_ONLY",
+      "delivery_status": "SOURCE_CHECKPOINT_VERIFIED",
       "source": "https://github.com/sink6985757-web/cross-device-agent-skills",
       "runtime_path": "~/.agents/skills",
       "required_skills": [
         "initial",
         "startup",
         "shutdown"
-      ]
+      ],
+      "revision": "7a377045b613ed4b9b1e7e5a17c1251dbd213ddf"
     },
     "readygate": {
       "version": "v0.2.1",
       "source": "https://github.com/sink6985757-web/readygate-skill-chatgpt-app",
-      "runtime_path": "~/.agents/skills/readygate"
+      "runtime_path": "~/.agents/skills/readygate",
+      "revision": "b7756661c98b69ca8766bfdfec833eb54ff74b4c"
     },
     "project_lifecycle_manifest": {
       "schema_version": 1,

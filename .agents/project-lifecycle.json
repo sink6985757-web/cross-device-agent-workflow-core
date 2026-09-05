@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "profile": "lite",
+  "profile": "full",
   "authority": {
     "core": {
       "repository": "sink6985757-web/cross-device-agent-workflow-core",
@@ -16,12 +16,12 @@
     }
   },
   "routing": {
-    "part": "part-example",
-    "project": "project-example",
+    "part": "agent-governance",
+    "project": "cross-device-agent-workflow-core",
     "project_root": "."
   },
   "project": {
-    "github_repository": "example/project",
+    "github_repository": "sink6985757-web/cross-device-agent-workflow-core",
     "remote": "origin",
     "default_branch": "main",
     "project_kind": "mixed"
@@ -41,7 +41,10 @@
       ".git",
       ".env",
       "private",
-      "raw"
+      "raw",
+      ".archive",
+      "node_modules",
+      "policy.local.yaml"
     ],
     "large_file_policy": "repository-default"
   },
@@ -56,11 +59,11 @@
     "pull_mode": "ff-only",
     "unknown_untracked": "stop",
     "allow_paths": [
-      ".agents/project-lifecycle.json",
       "AGENTS.md",
       "README.md",
       "CHANGELOG.md",
-      "handoff.md"
+      "handoff.md",
+      ".agents/project-lifecycle.json"
     ],
     "forbidden_actions": [
       "create-repository",
