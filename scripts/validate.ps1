@@ -20,13 +20,40 @@ $RequiredFiles = @(
     'templates/handoff.md',
     'templates/project.gitignore',
     'templates/policy.local.example.yaml',
-    'scripts/install.ps1'
+    'templates/project-lifecycle.template.json',
+    '.schemas/project-lifecycle.schema.json',
+    'scripts/install.ps1',
+    'scripts/project_lifecycle.py',
+    'tests/test_project_lifecycle.py'
 )
 
 foreach ($RelativePath in $RequiredFiles) {
     $Path = Join-Path $RepositoryRoot $RelativePath
     if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) {
         $Errors.Add("Missing required file: $RelativePath")
+    }
+}
+
+$LifecycleSchemaPath = Join-Path $RepositoryRoot '.schemas\project-lifecycle.schema.json'
+$LifecycleTemplatePath = Join-Path $RepositoryRoot 'templates\project-lifecycle.template.json'
+foreach ($JsonPath in @($LifecycleSchemaPath, $LifecycleTemplatePath)) {
+    if (Test-Path -LiteralPath $JsonPath -PathType Leaf) {
+        try {
+            [void]([System.IO.File]::ReadAllText($JsonPath, $Utf8) | ConvertFrom-Json)
+        } catch {
+            $Errors.Add("Lifecycle JSON is invalid: $JsonPath ($($_.Exception.Message))")
+        }
+    }
+}
+
+$Python = Get-Command python -ErrorAction SilentlyContinue
+if (-not $Python) {
+    $Errors.Add('Python is required to validate the project lifecycle manifest contract.')
+} elseif (Test-Path -LiteralPath $LifecycleTemplatePath -PathType Leaf) {
+    $LifecycleValidatorPath = Join-Path $RepositoryRoot 'scripts\project_lifecycle.py'
+    & $Python.Source $LifecycleValidatorPath validate-manifest $LifecycleTemplatePath *> $null
+    if ($LASTEXITCODE -ne 0) {
+        $Errors.Add('Project lifecycle template failed scripts/project_lifecycle.py validation.')
     }
 }
 
@@ -66,12 +93,13 @@ foreach ($File in $Files) {
 
 $TextExtensions = @('.md', '.txt', '.json', '.yaml', '.yml', '.toml', '.ini', '.ps1', '.py', '.js', '.ts', '.tsx', '.sh', '.cmd', '.bat')
 $ValidatorPath = Join-Path $RepositoryRoot 'scripts\validate.ps1'
+$IntentionalPatternFiles = @($ValidatorPath, $LifecycleSchemaPath)
 
 foreach ($File in $Files) {
     if ($TextExtensions -notcontains $File.Extension.ToLowerInvariant()) {
         continue
     }
-    if ($File.FullName -eq $ValidatorPath) {
+    if ($IntentionalPatternFiles -contains $File.FullName) {
         continue
     }
 

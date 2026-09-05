@@ -4,6 +4,8 @@ profile: lite
 project:
   name: "<project-name>"
   owner_role: "<owner-role>"
+  # Device-only resolution. Never copy this value into the committed manifest.
+  absolute_path: "<device-local-project-path>"
 
 authority:
   code: "project-git"
@@ -21,7 +23,8 @@ approvals:
   notion_write: "explicit-only"
 
 integrations:
-  github: "optional"
+  # Repository identity belongs in .agents/project-lifecycle.json.
+  github_auth: "runtime-only"
   obsidian: "optional"
   notion: "explicit-only"
   plugins_apps_mcp: []

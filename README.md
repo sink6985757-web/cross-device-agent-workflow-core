@@ -1,5 +1,33 @@
 # Cross-Device Agent Workflow Core
 
+## 2026-09-05 維護更新
+
+本次 source 更新包含portable lifecycle schema、template、唯讀 Git classifier 與 Full Core 維護流程。版本以 Git commit 識別；既有發行 tag 保持不變。當本次對話或已確認工作單已明列更新、commit／push 與驗收範圍，沿用該授權完成，不為相同動作重複提問；未涵蓋的動作仍停在確認點。Startup 維持唯讀，完成讀取報告後可轉入已授權的獨立工作階段。
+
+目前交接與驗收範圍見 [handoff.md](handoff.md)，歷史變更見 [CHANGELOG.md](CHANGELOG.md)。
+
+## Portable Project Lifecycle v2
+
+Full Core 提供共同契約，不把所有專案合併成 monorepo：
+
+| 層 | 定義 |
+|---|---|
+| Authority Kernel | 本 Core 的 `.schemas/project-lifecycle.schema.json`、template、validator，以及外部 pinned Lite／ReadyGate revision |
+| Part routing | 只回答「這個 Project 屬於哪個 Part」；不是固定 Part 9，也不是 Git root／branch |
+| Project instance | 每個實際 repository 自己的 `.agents/project-lifecycle.json`、Git top-level、remote、branch 與歷史 |
+| Device binding | 絕對路徑、裝置名稱、登入與 credential；只留 runtime／ignored `policy.local.yaml` |
+
+部署步驟是「複製 template → 填入不可變 authority revision 與 Project identity → 放在專案根 `.agents/project-lifecycle.json` → 驗證」，不是把 Core 文件整份覆蓋到每個專案。專案既有 `AGENTS.md`、README 與規則必須保留，只修改 allowlist 或明確 managed block。
+
+```powershell
+python .\scripts\project_lifecycle.py validate-manifest .\templates\project-lifecycle.template.json
+python .\scripts\project_lifecycle.py classify-git <project-root>\.agents\project-lifecycle.json --project-root <project-root>
+```
+
+`classify-git` 唯讀；不 clone、pull、commit、push、merge、rebase、切 branch 或改 remote。Initial 建立 bootstrap checkpoint，Startup fetch 並對照遠端 SHA（不建空 commit），Shutdown 建立工作 checkpoint。`manual` 每次等確認；`standing_scoped` 只在既有正確 remote、目前 branch、allowlist、安全檢查與非 force push 限制全通過時生效。
+
+資料型專案使用 `content.tracked_roots`、`excluded_roots` 與 `large_file_policy` 說明要進 Git 的內容；private／raw／大型資料可選 `manifest-only`、`git-lfs` 或 `exclude`，不得假設所有資料 bytes 都應 push。
+
 跨裝置 Agent 工作流的公開 Full Core。它負責第一次部署、完整治理、相容性檢查與按需 SOP；日常專案則使用外部 Lite 三技能。
 
 目前 GitHub 發行版：`v0.1.0`
@@ -66,14 +94,25 @@ Agent 必須以 Git remote 與 revision 辨識 Core checkout，不以資料夾�
 - [`FEATURES.json`](FEATURES.json)：機器可讀 profile、依賴與功能狀態。
 - [`CHANGELOG.md`](CHANGELOG.md)：近期版本與 delivery 狀態。
 
-## 最短流程
+## 生命週期路由
+
+| 流程 | 何時使用 | 完成與停止點 |
+|---|---|---|
+| `initial` | 新專案第一次建立治理結構、既有專案缺件修復或明確技能部署 | 建立／修復並回讀後停止；不自動開始工作或 GitHub delivery |
+| `startup` | 每次開始或接續既有專案 | 唯讀開工報告後停止，等待工作選擇 |
+| 工作執行 | 範圍已確認後進行修改與驗證 | 高風險、不可逆或外部動作先通過 Requirement Gate |
+| `shutdown` | 每次工作階段結束或換電腦 | 更新本機版本紀錄與交接；沒有外部授權就停止在 `LOCAL_ONLY`／`PENDING_GATE` |
 
 ```text
-初始化專案 → initial
-開始工作   → startup
-結束工作   → shutdown
-高風險任務 → ReadyGate
+新專案／缺件 → initial → 停止
+每次開始     → startup → 等待工作選擇
+確認工作     → [需要時 Requirement Gate] → 執行與驗證
+每次結束     → shutdown：先更新本機紀錄與交接
+                 ├─ 無外部授權 → LOCAL_ONLY／PENDING_GATE，停止
+                 └─ 已授權 → Delivery Gate → 精確授權的 delivery → 回讀
 ```
+
+ReadyGate 是橫向雙閘門，不是第四個固定日常階段。一般唯讀開工不啟動；`WORK_ORDER_CONFIRMED` 不是驗證證據，`READY` 也不是自動取得 commit、push、tag 或 release 的許可。
 
 ## 目前限制
 

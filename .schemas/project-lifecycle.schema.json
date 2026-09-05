@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sink6985757-web/cross-device-agent-workflow-core/blob/main/.schemas/project-lifecycle.schema.json",
+  "title": "Portable project lifecycle manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile",
+    "authority",
+    "routing",
+    "project",
+    "paths",
+    "content",
+    "checkpoint",
+    "device_binding",
+    "rollback"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "profile": { "enum": ["lite", "full"] },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["core", "lifecycle", "readygate"],
+      "properties": {
+        "core": { "$ref": "#/$defs/authoritySource" },
+        "lifecycle": { "$ref": "#/$defs/authoritySource" },
+        "readygate": { "$ref": "#/$defs/authoritySource" }
+      }
+    },
+    "routing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["part", "project", "project_root"],
+      "properties": {
+        "part": { "type": "string", "minLength": 1 },
+        "project": { "type": "string", "minLength": 1 },
+        "project_root": { "const": "." }
+      }
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["github_repository", "remote", "default_branch", "project_kind"],
+      "properties": {
+        "github_repository": { "$ref": "#/$defs/repository" },
+        "remote": { "type": "string", "pattern": "^[A-Za-z0-9._-]+$" },
+        "default_branch": { "type": "string", "minLength": 1 },
+        "project_kind": { "enum": ["code", "data", "docs", "mixed"] }
+      }
+    },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agents", "readme", "changelog", "handoff", "manifest"],
+      "properties": {
+        "agents": { "$ref": "#/$defs/portablePath" },
+        "readme": { "$ref": "#/$defs/portablePath" },
+        "changelog": { "$ref": "#/$defs/portablePath" },
+        "handoff": { "$ref": "#/$defs/portablePath" },
+        "manifest": { "const": ".agents/project-lifecycle.json" }
+      }
+    },
+    "content": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tracked_roots", "excluded_roots", "large_file_policy"],
+      "properties": {
+        "tracked_roots": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "anyOf": [
+              { "const": "." },
+              { "$ref": "#/$defs/portablePath" }
+            ]
+          }
+        },
+        "excluded_roots": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/portablePath" }
+        },
+        "large_file_policy": {
+          "enum": ["repository-default", "git-lfs", "manifest-only", "exclude"]
+        }
+      }
+    },
+    "checkpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "initial",
+        "startup",
+        "shutdown",
+        "branch_policy",
+        "readback",
+        "force_push",
+        "pull_mode",
+        "unknown_untracked",
+        "allow_paths",
+        "forbidden_actions"
+      ],
+      "properties": {
+        "mode": { "enum": ["manual", "standing_scoped"] },
+        "initial": { "const": "push-bootstrap" },
+        "startup": { "const": "fetch-and-verify" },
+        "shutdown": { "const": "commit-and-push-current-branch" },
+        "branch_policy": { "const": "current-work-branch" },
+        "readback": { "const": "remote-sha" },
+        "force_push": { "const": false },
+        "pull_mode": { "const": "ff-only" },
+        "unknown_untracked": { "const": "stop" },
+        "allow_paths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/portablePath" }
+        },
+        "forbidden_actions": {
+          "type": "array",
+          "minItems": 7,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "create-repository",
+              "force-push",
+              "auto-merge-or-rebase",
+              "tag-or-release",
+              "merge-pull-request",
+              "delete-or-archive",
+              "change-permissions"
+            ]
+          }
+        }
+      }
+    },
+    "device_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "local_policy"],
+      "properties": {
+        "mode": { "const": "runtime-only" },
+        "local_policy": { "const": "policy.local.yaml" }
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "published_change",
+        "inspect_old_revision",
+        "behind_clean",
+        "diverged",
+        "clone_target"
+      ],
+      "properties": {
+        "published_change": { "const": "git-revert" },
+        "inspect_old_revision": { "const": "restore-branch" },
+        "behind_clean": { "const": "pull-ff-only" },
+        "diverged": { "const": "stop-preserve-refs" },
+        "clone_target": { "const": "empty-directory-only" }
+      }
+    }
+  },
+  "$defs": {
+    "authoritySource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "revision"],
+      "properties": {
+        "repository": { "$ref": "#/$defs/repository" },
+        "revision": {
+          "type": "string",
+          "pattern": "^(?:[0-9A-Fa-f]{40}|v?[0-9]+(?:\\.[0-9]+){1,3}(?:[-+][0-9A-Za-z.-]+)?)$"
+        }
+      }
+    },
+    "repository": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+    },
+    "portablePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!~)(?!\\.\\.?$)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)(?!.*\\\\).+$"
+    }
+  }
+}

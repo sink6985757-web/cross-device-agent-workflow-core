@@ -1,39 +1,20 @@
 # Handoff
 
-## 目前做到哪
+## 目前狀態
 
-本 checkout 被保留為目前 Cross-Device Agent Workflow Core 工作對齊點。`v0.2.0` GitHub `main` 候選已完成名稱、四檔契約、Core 四技能 profile、repository 權責與外部知識庫獨立邊界更新；不複製 Lite 或 ReadyGate canonical。
+- 工作單：`WO-DRIVE-GITHUB-ALIGN-20260905-v2`，使用者已確認依 v2 順序修改與同步既有 GitHub repositories。
+- 本輪：完成portable lifecycle schema、template、唯讀 Git classifier 與 Full Core 維護流程。既有差異已保全並納入審查。
+- 驗證：Core validator 25 files PASS；project lifecycle unittest 9/9 PASS。 `git diff --check` 通過；以本輪提交前重跑結果為準。
+- Git 基底：`0868a4cc157ae16be32084284450d7e20f6fa341`；本文件所在提交承載本輪治理來源更新。
+- Delivery：允許 scoped commit／非 force push 到既有 default branch；遠端回讀前不宣稱已同步。
+- 發行：僅更新 source；既有 tag／Release 保持原狀。
 
-## 狀態
+## 唯一續跑點
 
-- 可執行：`YES`
-- Core validator：`PASS`（19 files）。
-- Bootstrap doctor：`FULL`，建議日常仍使用 Lite，`writes_performed=false`。
-- Lite：三份 Skill validator 通過，四處 SHA-256 一致。
-- ReadyGate：Skill／Plugin validators 與 8 項合約測試通過；行為仍是 `v0.2.1`。
-- GitHub：`VERIFIED`；治理 commit `b6e27e330c5e07a1b1d8d41077d28b1a21811331` 已推送 `main` 並回讀一致。
-- tag／Release：未執行；正式 release 基準仍是 `v0.1.0`。
+完成本來源 default branch SHA 回讀後，將三個不可變 authority SHA 填入 `newday` 的 manual manifest，驗證 pilot；再同步 dotfiles active source、Drive mirror 與 runtime。
 
-## Repository 關係
+## 邊界
 
-- GitHub `cross-device-agent-workflow-core`：版本權威。
-- 本 checkout：目前工作副本，必須保留。
-- workspace `cross-device-agent-workflow-core/`：命名鏡像，等待 GitHub delivery 後再同步。
-- workspace `cross-file/`：舊名封存候選；未移動、未刪除。
+各 repository 獨立 checkpoint；不把 Part 當 Git root。不啟用 standing_scoped，不建立 repository、tag／Release，不合併 PR、不搬移或封存。私人設定與來源不明檔案保持原狀。
 
-## 下一步
-
-1. 將 named mirror 安全快轉到 GitHub `main` 並回讀。
-2. 若要正式發布 `v0.2.0`，另走 tag／Release Gate。
-3. `cross-file/` legacy checkout 仍維持獨立封存停點。
-
-## 風險
-
-- `v0.2.0`、Lite `v2.0.0` 都是未發布候選。
-- 在 GitHub delivery 前，其他 checkout 保持原狀才是可回復策略。
-
-## 最近更新
-
-- 時間：2026-08-09 Asia/Taipei
-- Agent：Codex
-- 成果 revision：未提交工作樹
+更新：2026-09-05，Codex。跨裝置接續以實際 Git SHA 與 Drive 回讀為準。

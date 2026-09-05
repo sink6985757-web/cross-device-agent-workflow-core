@@ -1,5 +1,16 @@
 # Maintainers Guide
 
+當本次對話或已確認工作單已明列更新、commit／push 與驗收範圍，沿用該授權完成，不為相同動作重複提問；未涵蓋的動作仍停在確認點。Startup 維持唯讀，完成讀取報告後可轉入已授權的獨立工作階段。
+
+## Project lifecycle manifest 維護
+
+1. 共同 schema、template 與 validator 只在 Full Core 維護；Lite／ReadyGate 只描述操作邊界，不複製 schema。
+2. 發布 Core 時 pin Lite、ReadyGate 與 Core 自身的不可變 tag／commit；Project manifest 不引用裝置 checkout 路徑。
+3. 部署到個別 Project 前，先驗證該 repository 的 Git top-level、remote identity、default／current branch、content roots、large-file policy 與 checkpoint allowlist。
+4. 預設 `manual`。要改成 `standing_scoped`，工作單必須列出 repository、remote、branch policy、allowlist、denylist、secret／unknown untracked 行為、readback 與 rollback。
+5. 只建立缺少的 manifest 或修改已核准欄位；不得整份覆蓋專案既有治理文件。先以單一 Project pilot 驗證，再逐一套用；Part 不是批次 Git 邊界。
+6. validator 與 tests 必須同時覆蓋 valid／invalid manifest、相對／絕對路徑、clean／dirty／ahead／behind／diverged／wrong remote。
+
 本檔供 Full Core 維護、相容性升級與公開發布使用。一般專案不需要日常讀取。
 
 ## Repository 責任

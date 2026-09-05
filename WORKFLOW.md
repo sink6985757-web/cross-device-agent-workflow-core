@@ -1,5 +1,34 @@
 # AI Workflow SOP
 
+當本次對話或已確認工作單已明列更新、commit／push 與驗收範圍，沿用該授權完成，不為相同動作重複提問；未涵蓋的動作仍停在確認點。Startup 維持唯讀，完成讀取報告後可轉入已授權的獨立工作階段。
+
+## Portable lifecycle 與 GitHub checkpoint
+
+```text
+Authority Kernel
+  └─ Part route（分類）
+       └─ Project repository（git rev-parse --show-toplevel）
+            ├─ .agents/project-lifecycle.json
+            └─ origin／current work branch／checkpoint history
+```
+
+| 流程 | checkpoint 契約 | 停止條件 |
+|---|---|---|
+| Initial | 建立／驗證 manifest 與 bootstrap commit；有既有正確 remote 才 push／readback | 無 remote、wrong remote、unknown untracked、secret、驗證失敗或 policy 不足時 `PARTIAL/BLOCKED` |
+| Startup | fetch、記錄 remote SHA、分類 clean／dirty／ahead／behind／diverged／wrong remote | 報告後必停；不建空 commit、不 pull／merge／rebase |
+| Shutdown | 更新 changelog／handoff，再依 policy 建立 scoped commit、push 目前 branch、readback | `manual` 等確認；`standing_scoped` 任一限制不符即停止 |
+
+衝突與回復規則：
+
+- `DIRTY`：保留現有修改，先辨識 owner；不得用 remote 覆蓋。
+- `AHEAD`：本機 commit 尚未 push，先 checkpoint 或明確保留。
+- `BEHIND`：只有乾淨且沒有 ahead 時，才在 Startup 外的獨立步驟用 `pull --ff-only`。
+- `DIVERGED`：保存 local／remote refs，停止；不 auto merge／rebase。
+- `WRONG_REMOTE`：停止；不得為了成功而改推另一個 remote。
+- 已發布錯誤建立 `git revert` commit；檢視舊版建立 restore branch；clone 只進空目錄。
+
+`standing_scoped` 只能由先前工作單建立，不等於 ReadyGate 的 `READY`。變更 mode、repository、remote、branch、allowlist、Part／Project identity 或 authority revision，及建立 repository、force push、tag／release、PR merge、刪除／封存、權限變更，全部需要新的 Requirement／Delivery Gate。
+
 本 SOP 是 Full Core 的按需工作面。一般專案預設維持 Lite；只有工作觸發某一能力時才讀該段。
 
 ## 共通生命週期
@@ -19,6 +48,17 @@ INTAKE → PLAN → CONFIRMED → EXECUTION → VERIFICATION → DELIVERY → HA
 - 外部寫入或不可逆動作的授權。
 
 小型、可回復、單檔工作可以縮短流程；公開發布、刪除、批次遷移、權限變更或多系統寫入不得略過確認。
+
+### 與 Lite 生命週期的對應
+
+| Lite 流程 | 對應狀態 | 邊界 |
+|---|---|---|
+| `initial` | 專案治理入口建立 | 只建立缺件或部署技能，完成後停止；不是每次工作的 `INTAKE` |
+| `startup` | 只讀 `INTAKE` 摘要 | 報告後停止等待，不進入 `EXECUTION`、不產生寫入授權 |
+| 已確認工作 | `PLAN → CONFIRMED → EXECUTION → VERIFICATION` | 高風險或外部動作依下節插入 ReadyGate |
+| `shutdown` | `HANDOFF` | 每次更新本機版本紀錄與交接；`DELIVERY` 沒有獲授權時仍可完成 `LOCAL_ONLY` handoff |
+
+`initial`、`startup`、`shutdown` 是縱向專案生命週期；ReadyGate 是橫向風險閘門。不要因為使用 `shutdown` 就反推 `DELIVERY` 已授權，也不要因 ReadyGate 結論為 `READY` 就跳過動作本身的授權。
 
 ## ReadyGate 橫向閘門
 

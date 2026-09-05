@@ -49,6 +49,13 @@
       "version": "v0.2.1",
       "source": "https://github.com/sink6985757-web/readygate-skill-chatgpt-app",
       "runtime_path": "~/.agents/skills/readygate"
+    },
+    "project_lifecycle_manifest": {
+      "schema_version": 1,
+      "schema": ".schemas/project-lifecycle.schema.json",
+      "template": "templates/project-lifecycle.template.json",
+      "validator": "scripts/project_lifecycle.py",
+      "deployed_path": ".agents/project-lifecycle.json"
     }
   },
   "allowed_statuses": [
@@ -105,6 +112,13 @@
       "profile": "on-demand",
       "entry": "WORKFLOW.md",
       "writes": "per-section-policy"
+    },
+    {
+      "id": "portable-project-lifecycle-manifest",
+      "status": "IMPLEMENTED",
+      "profile": "lite-and-full",
+      "entry": "scripts/project_lifecycle.py",
+      "writes": false
     },
     {
       "id": "legacy-project-migration",

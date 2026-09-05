@@ -1,5 +1,18 @@
 # <PROJECT_NAME>
 
+當本次對話或已確認工作單已明列更新、commit／push 與驗收範圍，沿用該授權完成，不為相同動作重複提問；未涵蓋的動作仍停在確認點。Startup 維持唯讀，完成讀取報告後可轉入已授權的獨立工作階段。
+
+## Project lifecycle manifest
+
+- Portable manifest：`.agents/project-lifecycle.json`
+- Part：只做分類／路由，不是 Git repository。
+- Project root：每次以 `git rev-parse --show-toplevel` 驗證，必須等於 manifest 所在 repository root。
+- Canonical path：只用專案相對路徑；裝置絕對路徑與 credential 留在 ignored `policy.local.yaml`。
+- Checkpoint mode：`manual`（預設）或經工作單核准的 `standing_scoped`。
+- Startup：fetch／對照遠端 SHA 後停止，不建立空 commit。
+- Shutdown：更新 changelog／handoff；`manual` 等確認，`standing_scoped` 只 commit／push allowlist 內變更並回讀 SHA。
+- Denylist：建立 repository、force push、auto merge／rebase、tag／release、PR merge、刪除／封存、權限變更。
+
 ## 目標
 
 <一句話說明接收者能用本專案完成什麼；未知就寫「待確認」。>
@@ -9,6 +22,13 @@
 - Profile：`lite`
 - Full Core：`NOT_CONFIGURED`
 - ReadyGate：`ON_DEMAND`
+
+## 生命週期路由
+
+- `initial`：只用於第一次建立治理結構、修復缺件或明確部署技能；完成後停止。
+- `startup`：每次開工唯讀回報，完成後停止並等待工作選擇。
+- `shutdown`：每次收工更新 `CHANGELOG.md` 與 `handoff.md`；不自動 commit 或 push。
+- `ReadyGate`：只有重大返工、高風險、不可逆或外部交付工作按需插入；`READY` 不等於自動取得外部授權。
 
 ## 專案結構
 
